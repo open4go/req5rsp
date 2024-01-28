@@ -12,3 +12,18 @@ type TakeOut struct {
 	Phone       string `json:"phone"`        // 收件人手机号
 	Remark      string `json:"remark"`       // 备注
 }
+
+// TakeOutOrder 下单请求参数
+type TakeOutOrder struct {
+	OriginId        string `json:"origin_id" binding:"required"`
+	PriceToken      string `json:"price_token" binding:"required"`
+	OrderPrice      string `json:"total_money"  binding:"required"`
+	BalancePaymoney string `json:"need_paymoney"  binding:"required"`
+	Receiver        string `json:"receiver"  binding:"required"`
+	ReceiverPhone   string `json:"receiver_phone"  binding:"required"`
+	Note            string `json:"note"  binding:"required"`
+	CallbackUrl     string `json:"callback_url" `
+	PushType        string `json:"push_type,default=2"`
+	SpecialType     string `json:"special_type"`
+	CallmeWithtake  string `json:"callme_withtake"`
+}
