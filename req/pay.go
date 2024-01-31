@@ -5,7 +5,7 @@ import "github.com/open4go/req5rsp/cst"
 // PayRequest 支付请求
 type PayRequest struct {
 	// 状态 （前端根据订单状态选择是否调用支付）
-	OrderStatus cst.OrderStatus `form:"status" json:"status" xml:"status"  binding:"required"`
+	OrderStatus cst.OrderStatus `form:"status" json:"status" xml:"status"`
 	// 订单号
 	OrderID string `form:"order_id" json:"order_id" xml:"order_id"  binding:"required"`
 	// 订单描述
