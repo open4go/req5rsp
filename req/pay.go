@@ -7,7 +7,7 @@ type PayRequest struct {
 	// 订单号
 	OrderID string `form:"order_id" json:"order_id" xml:"order_id"  binding:"required"`
 	// 订单描述
-	Desc string `form:"desc" json:"desc" xml:"desc"`
+	Desc string `form:"desc" json:"desc" xml:"desc" binding:"required"`
 	// 金额 (单位:分）
 	Amount int64 `form:"amount" json:"amount" xml:"amount"  binding:"required"`
 }
