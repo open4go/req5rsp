@@ -19,3 +19,9 @@ type PayInfo struct {
 	PayMethod  string          `form:"pay_method" json:"pay_method" xml:"pay_method"  binding:"required"`
 	PayChannel cst.ChannelType `form:"pay_channel" json:"pay_channel" xml:"pay_channel"`
 }
+
+// CloseRequest 关单请求
+type CloseRequest struct {
+	// 订单号
+	OrderID string `form:"order_id" json:"order_id" xml:"order_id"  binding:"required"`
+}
