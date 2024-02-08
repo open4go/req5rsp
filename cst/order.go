@@ -14,6 +14,8 @@ const (
 	OrderProduceCompleted
 	// OrderCompleted 订单完成 （已经自提/堂食配送完成）
 	OrderCompleted
+	// 	OrderCancelRejected  拒绝取消
+	OrderCancelRejected
 	// OrderCancel 订单取消
 	OrderCancel
 	// OrderCancelApproved 订单取消 （商家同意）
