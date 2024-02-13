@@ -34,4 +34,6 @@ const (
 	OrderTakeoutDone
 	// OrderTakeoutComment 订单已经评论
 	OrderTakeoutComment
+	// OrderClosed 订单关闭 (超时未支付的订单会被关闭)
+	OrderClosed
 )
