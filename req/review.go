@@ -16,13 +16,13 @@ import "github.com/open4go/req5rsp/cst"
 */
 type Review struct {
 	// CommandId 订单id
-	CommandId int `json:"command_id"`
+	CommandId string `form:"command_id" json:"command_id" xml:"command_id"  binding:"required"`
 	// Comment 评论
-	Comment string `json:"comment"`
+	Comment string `form:"comment" json:"comment" xml:"comment"`
 	// CustomerId 客服id
-	CustomerId int `json:"customer_id"`
-	// 产品id
-	ProductId int `json:"product_id"`
+	CustomerId string `form:"customer_id" json:"customer_id" xml:"customer_id"  binding:"required"`
+	// 产品id (产品id可以是一个json序列化列表
+	ProductId string `form:"product_id" json:"product_id" xml:"product_id"`
 	// 综合评分
 	Rating int `json:"rating"`
 	// 状态
