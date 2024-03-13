@@ -20,5 +20,5 @@ type Merchant struct {
 	// 商户api key
 	MerchantAPIKey string `form:"merchant_api_key" json:"merchant_api_key" xml:"merchant_api_key"`
 	// 商户api key
-	MerchantAPIKey string `form:"merchant_api_key" json:"merchant_api_key" xml:"merchant_api_key"`
+	//MerchantAPI string `form:"merchant_api_key" json:"merchant_api_key" xml:"merchant_api_key"`
 }
