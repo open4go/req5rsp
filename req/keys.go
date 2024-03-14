@@ -19,6 +19,8 @@ type Merchant struct {
 	MerchantCertSN string `form:"merchant_cert_sn" json:"merchant_cert_sn" xml:"merchant_cert_sn"`
 	// 商户api key
 	MerchantAPIKey string `form:"merchant_api_key" json:"merchant_api_key" xml:"merchant_api_key"`
-	// 商户api key
-	//MerchantAPI string `form:"merchant_api_key" json:"merchant_api_key" xml:"merchant_api_key"`
+	// 应用Id
+	AppID string `form:"app_id" json:"app_id" xml:"app_id"`
+	// 回调地址
+	Callback string `form:"callback" json:"callback" xml:"callback"`
 }
