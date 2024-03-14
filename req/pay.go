@@ -13,7 +13,7 @@ type PayRequest struct {
 	// 金额 (单位:分）
 	Amount int64 `form:"amount" json:"amount" xml:"amount"  binding:"required"`
 	// 订单发生地点 (门店id；渠道：微信；...)
-	At string `form:"at" json:"at" xml:"at" binding:"required"`
+	At string `form:"at" json:"at" xml:"at"`
 }
 
 // PayInfo 项目请求体
