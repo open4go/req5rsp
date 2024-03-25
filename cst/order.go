@@ -3,6 +3,9 @@ package cst
 // OrderStatus 订单状态
 type OrderStatus int
 
+// OrderFrom 订单来源
+type OrderFrom int
+
 const (
 	// OrderInit 订单初始化(未完成支付）
 	OrderInit OrderStatus = iota
@@ -36,4 +39,17 @@ const (
 	OrderTakeoutComment
 	// OrderClosed 订单关闭 (超时未支付的订单会被关闭)
 	OrderClosed
+)
+
+const (
+	// OrderFromWxMini 微信小程序
+	OrderFromWxMini OrderFrom = iota
+	// OrderFromAliMini 支付宝小程序
+	OrderFromAliMini
+	// OrderFromMeiTuan 美团
+	OrderFromMeiTuan
+	// OrderFromPos 前台点餐
+	OrderFromPos
+	// OrderFromWeb 来自官网
+	OrderFromWeb
 )
