@@ -27,3 +27,19 @@ type CloseRequest struct {
 	// 订单号
 	OrderID string `form:"order_id" json:"order_id" xml:"order_id"  binding:"required"`
 }
+
+// ScanPayRequest 扫码支付
+type ScanPayRequest struct {
+	// 支付渠道
+	Channel cst.ChannelType `form:"channel" json:"channel" xml:"channel" binding:"required"`
+	// 订单号
+	OrderID string `form:"order_id" json:"order_id" xml:"order_id" binding:"required"`
+	// 订单描述
+	Desc string `form:"desc" json:"desc" xml:"desc" binding:"required"`
+	// 金额 (单位:分）
+	Amount int64 `form:"amount" json:"amount" xml:"amount"  binding:"required"`
+	// 订单发生地点 (门店id；渠道：微信；...)
+	At string `form:"at" json:"at" xml:"at"`
+	// 订单发生地点 (门店id；渠道：微信；...)
+	Code string `form:"code" json:"code" xml:"code"`
+}
