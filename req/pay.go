@@ -46,3 +46,11 @@ type ScanPayRequest struct {
 	// 这里不限定死，后台或者增加一个账号类型以便区分
 	UserID string `form:"user_id" json:"user_id" xml:"user_id"`
 }
+
+// ScanQueryRequest 扫码支付
+type ScanQueryRequest struct {
+	// 订单号 (发起下单后会自动生成订单号并且在支付时自动填入该字段)
+	OrderID string `form:"order_id" json:"order_id" xml:"order_id" binding:"required"`
+	// 订单号 (发起下单后会自动生成订单号并且在支付时自动填入该字段)
+	TransactionID string `form:"transaction_id" json:"transaction_id" xml:"transaction_id" binding:"required"`
+}
