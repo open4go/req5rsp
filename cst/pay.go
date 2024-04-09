@@ -34,3 +34,20 @@ const (
 func (p PayMethod) String() string {
 	return [...]string{"微信小程序支付", "微信扫码支付", "支付宝小程序支付", "支付宝扫码支付"}[p]
 }
+
+type PayStatus int
+
+const (
+	// UnPaid 未支付
+	UnPaid PayStatus = iota
+	// PaidDone 已支付
+	PaidDone
+	// Refunding 退款中
+	Refunding
+	// Refunded 已退款
+	Refunded
+)
+
+func (p PayStatus) String() string {
+	return [...]string{"未支付", "已支付", "退款中", "已退款"}[p]
+}
