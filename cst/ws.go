@@ -21,3 +21,8 @@ const (
 	// MonthlyNewUser 每月新增用户
 	MonthlyNewUser
 )
+
+const (
+	// WSDataChannel 数据推送
+	WSDataChannel = "ws:data:channel:0"
+)
