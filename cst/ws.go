@@ -20,6 +20,8 @@ const (
 	WeeklyNewUser
 	// MonthlyNewUser 每月新增用户
 	MonthlyNewUser
+	// PendingOrderNews 新的待支付订单信息
+	PendingOrderNews
 )
 
 const (
