@@ -44,7 +44,7 @@ type Order struct {
 	// 订单id
 	ID string `json:"id"`
 	// 时间
-	Time string `json:"time"`
+	Time int64 `json:"time"`
 	// 金额
 	Price int `json:"price"`
 	// 数量
