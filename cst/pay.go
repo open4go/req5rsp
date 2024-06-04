@@ -51,3 +51,12 @@ const (
 func (p PayStatus) String() string {
 	return [...]string{"未支付", "已支付", "退款中", "已退款"}[p]
 }
+
+type PayUnit int
+
+const (
+	// PayByFen 以分支付
+	PayByFen PayUnit = 1
+	// PayByYuan 以元支付
+	PayByYuan PayUnit = 100
+)

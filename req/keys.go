@@ -1,13 +1,6 @@
 package req
 
-type PayUnit int
-
-const (
-	// PayByFen 以分支付
-	PayByFen PayUnit = 1
-	// PayByYuan 以元支付
-	PayByYuan PayUnit = 100
-)
+import "github.com/open4go/req5rsp/cst"
 
 // Keys 密钥管理
 type Keys struct {
@@ -20,7 +13,7 @@ type Keys struct {
 	// Type 密钥类型
 	MerchantConf Merchant `form:"merchant_conf" json:"merchant_conf" xml:"merchant_conf"  binding:"required"`
 	// 支付单位
-	Unit PayUnit `form:"unit" json:"unit" xml:"unit"`
+	Unit cst.PayUnit `form:"unit" json:"unit" xml:"unit"`
 }
 
 type Merchant struct {
