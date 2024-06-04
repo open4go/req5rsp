@@ -1,6 +1,8 @@
 package req
 
-import "github.com/open4go/req5rsp/cst"
+import (
+	"github.com/open4go/req5rsp/cst"
+)
 
 // PayRequest 支付请求
 type PayRequest struct {
@@ -53,4 +55,18 @@ type ScanQueryRequest struct {
 	OrderID string `form:"order_id" json:"order_id" xml:"order_id" binding:"required"`
 	// 订单号 (发起下单后会自动生成订单号并且在支付时自动填入该字段)
 	TransactionID string `form:"transaction_id" json:"transaction_id" xml:"transaction_id" binding:"required"`
+}
+
+// PaymentOrder 新的支付订单
+type PaymentOrder struct {
+	// 支付单号
+	ID string `json:"id"`
+	// 订单id
+	OrderID string `json:"order_id"`
+	// 金额
+	Amount float64 `json:"amount"`
+	// 数量
+	Quantity int `json:"quantity"`
+	// 时间(时间戳）
+	Time int64 `json:"time"`
 }
