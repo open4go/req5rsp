@@ -1,5 +1,14 @@
 package req
 
+type PayUnit int
+
+const (
+	// PayByFen 以分支付
+	PayByFen PayUnit = 1
+	// PayByYuan 以元支付
+	PayByYuan PayUnit = 100
+)
+
 // Keys 密钥管理
 type Keys struct {
 	// Name 密钥名称(例如：微信支付商户)
@@ -10,6 +19,8 @@ type Keys struct {
 	Type string `form:"type" json:"type" xml:"type"  binding:"required"`
 	// Type 密钥类型
 	MerchantConf Merchant `form:"merchant_conf" json:"merchant_conf" xml:"merchant_conf"  binding:"required"`
+	// 支付单位
+	Unit PayUnit `form:"unit" json:"unit" xml:"unit"`
 }
 
 type Merchant struct {
