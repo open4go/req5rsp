@@ -8,6 +8,7 @@ type WSMessage struct {
 	Type      cst.WSMessageType `form:"type" json:"type" xml:"type"`
 	OrderNews []Order           `form:"order_news,omitempty" json:"order_news,omitempty" xml:"order_news,omitempty"`
 	BarLine   BarLineChart      `form:"bar_line,omitempty" json:"bar_line,omitempty" xml:"bar_line,omitempty"`
+	Data      []MyData          `form:"data" json:"data" xml:"data"`
 }
 
 // BarLineChart 条形图和折线图可用相同的数据结构
@@ -69,4 +70,17 @@ type Merchant struct {
 	Mobile string `json:"mobile"`
 	// 商品略图
 	Icon string `json:"icon"`
+}
+
+// MyData
+//
+//	 id: any;
+//	icon: FC<any>;
+//	title?: string;
+//	content?: string;
+type MyData struct {
+	ID      string `json:"id"`
+	Icon    string `json:"icon"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }
