@@ -22,6 +22,8 @@ const (
 	MonthlyNewUser
 	// PendingOrderNews 新的待支付订单信息
 	PendingOrderNews
+	// FeedbackReviews 反馈评论数据
+	FeedbackReviews
 )
 
 const (
