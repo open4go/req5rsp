@@ -13,3 +13,14 @@ const (
 	Show                           // 1 << 5 = 32
 	Disable                        // 1 << 6 = 64
 )
+
+// PermissionNames 用于映射权限的二进制位到权限名称
+var PermissionNames = map[Permission]string{
+	Create:  "Create",
+	Delete:  "Delete",
+	Update:  "Update",
+	Read:    "Read",
+	List:    "List",
+	Show:    "Show",
+	Disable: "Disable",
+}
