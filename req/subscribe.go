@@ -5,6 +5,14 @@ import (
 	"github.com/silenceper/wechat/v2/miniprogram/subscribe"
 )
 
+// 先在小程序中完成订阅即可获取模版id
+const (
+	// PlaceOrderSuccessTp 下单成功通知
+	PlaceOrderSuccessTp = "XDH55V-yVYDu4_OhIWvYwXDLX5fvjDBUv2IgY6MDPD4"
+	// ReadyToTakeTp 取餐模板
+	ReadyToTakeTp = "bI6fgdcs9lK9YtFHz00NVAinh6hX_0bRFaRl2N6Dl1w"
+)
+
 type SubscribeChannel uint
 
 const (
@@ -27,9 +35,17 @@ const (
 	ReadyToTake
 )
 
+var MessageType2TpID = map[MessageType]string{
+	PlaceOrderSuccess: PlaceOrderSuccessTp,
+	ReadyToTake:       ReadyToTakeTp,
+}
+
+// CreateSubscribeRequest 创建消息订阅
 type CreateSubscribeRequest struct {
-	// 渠道
-	Channel SubscribeChannel `form:"channel" json:"channel" xml:"channel"  binding:"required"`
+	// 用户唯一标识
+	OpenID string `json:"open_id" bson:"open_id"`
+	// 渠道(暂时只支持微信小程序）
+	Channel SubscribeChannel `form:"channel" json:"channel" xml:"channel"`
 	// Payload 消息主体
 	Payload *MessagePayload `form:"mobile" json:"mobile" xml:"mobile"  binding:"required"`
 	// 类型
@@ -58,15 +74,21 @@ func NewMessage(req CreateSubscribeRequest) *MessagePayload {
 }
 
 // MessageRoute 根据消息类型不同，路由到不同的消息转换
-func MessageRoute(ctx context.Context, req CreateSubscribeRequest) map[string]*subscribe.DataItem {
+func MessageRoute(ctx context.Context, req CreateSubscribeRequest) (string, map[string]*subscribe.DataItem) {
+	// 获取模板ID
+	tpID, ok := MessageType2TpID[req.Type]
+	if !ok {
+		// 如果找不到匹配的模板ID，可以返回一个默认值或处理错误
+		tpID = PlaceOrderSuccessTp
+	}
 
 	switch req.Type {
 	case PlaceOrderSuccess:
-		return NewMessage(req).PlaceOrderSuccess()
+		return tpID, NewMessage(req).PlaceOrderSuccess()
 	case ReadyToTake:
-		return NewMessage(req).ReadyToTake()
+		return tpID, NewMessage(req).ReadyToTake()
 	default:
-		return NewMessage(req).PlaceOrderSuccess()
+		return tpID, NewMessage(req).PlaceOrderSuccess()
 	}
 }
 
