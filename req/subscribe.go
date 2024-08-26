@@ -25,8 +25,9 @@ const (
 type MessageType uint
 
 const (
+	DefaultType MessageType = iota
 	// PlaceOrderSuccess 下单成功
-	PlaceOrderSuccess MessageType = iota
+	PlaceOrderSuccess
 	// PayedDone 支付完成
 	PayedDone
 	// Produced 制作完成
@@ -47,9 +48,9 @@ type CreateSubscribeRequest struct {
 	// 渠道(暂时只支持微信小程序）
 	Channel SubscribeChannel `form:"channel" json:"channel" xml:"channel"`
 	// Payload 消息主体
-	Payload *MessagePayload `form:"mobile" json:"mobile" xml:"mobile"  binding:"required"`
+	Payload *MessagePayload `form:"payload" json:"payload" xml:"payload"  binding:"required"`
 	// 类型
-	Type MessageType `form:"type" json:"type" xml:"type"  binding:"required"`
+	Type MessageType `form:"type" json:"type" xml:"type"`
 }
 
 // MessagePayload https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-message-management/subscribe-message/sendMessage.html
