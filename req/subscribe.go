@@ -99,7 +99,7 @@ func (payload *MessagePayload) PlaceOrderSuccess() map[string]*subscribe.DataIte
 	return map[string]*subscribe.DataItem{
 		"thing5":   {Value: payload.Thing},
 		"amount12": {Value: payload.Amount},
-		"thing7":   {Value: payload.Thing},
+		"thing7":   {Value: payload.Address},
 		"date4":    {Value: payload.Date},
 	}
 }
