@@ -39,7 +39,7 @@ type ScanPayRequest struct {
 	// 订单描述 （订单自动生成）
 	Desc string `form:"desc" json:"desc" xml:"desc" binding:"required"`
 	// 金额 (单位:分）（订单自动生成）
-	Amount int64 `form:"amount" json:"amount" xml:"amount"  binding:"required"`
+	Amount float64 `form:"amount" json:"amount" xml:"amount"  binding:"required"`
 	// 订单发生地点 (门店id；渠道：微信；...) （订单自动生成）
 	At string `form:"at" json:"at" xml:"at"`
 	// 由扫码枪通过扫客户提供的支付二维码生成
