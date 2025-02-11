@@ -39,6 +39,10 @@ const (
 	OrderTakeoutComment
 	// OrderClosed 订单关闭 (超时未支付的订单会被关闭)
 	OrderClosed
+	// OrderRefundApply 申请退款
+	OrderRefundApply
+	// OrderRefunded 申请退款成功
+	OrderRefunded
 )
 
 const (
