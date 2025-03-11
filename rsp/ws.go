@@ -84,3 +84,9 @@ type MyData struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
+
+type WSEvent struct {
+	Value any   `json:"value"`
+	Type  int   `json:"type"`
+	Time  int64 `json:"time"`
+}
