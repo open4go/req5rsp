@@ -29,4 +29,5 @@ const (
 const (
 	// WSDataChannel 数据推送
 	WSDataChannel = "ws:data:channel:0"
+	WSDataEvent   = "ws:data:channel:2"
 )
