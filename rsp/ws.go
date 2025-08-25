@@ -54,6 +54,8 @@ type Order struct {
 	Customer User `json:"customer"`
 	// 供应商
 	Merchant Merchant `json:"merchant"`
+	// 订单状态
+	Status int `json:"status"`
 }
 
 type User struct {
