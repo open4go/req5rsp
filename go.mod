@@ -1,6 +1,6 @@
 module github.com/open4go/req5rsp
 
-go 1.23.0
+go 1.24
 
 toolchain go1.24.0
 
