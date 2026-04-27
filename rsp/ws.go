@@ -68,7 +68,9 @@ type Order struct {
 }
 
 type User struct {
-	Name   string `json:"name"`
+	// 名称
+	Name string `json:"name"`
+	// 手机号
 	Mobile string `json:"mobile"`
 	// 头像
 	Avatar string `json:"avatar"`
