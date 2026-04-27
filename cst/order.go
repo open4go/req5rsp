@@ -57,3 +57,14 @@ const (
 	// OrderFromWeb 来自官网
 	OrderFromWeb
 )
+
+// OrderPickType 订单提餐方式
+type OrderPickType int
+
+const (
+	PickSelf     OrderPickType = iota // 自提
+	PickTakeout                       // 外卖
+	PickInSide                        // 堂食
+	PickTransfer                      // 快递
+	PickOnline                        // 虚拟
+)

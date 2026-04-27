@@ -56,6 +56,15 @@ type Order struct {
 	Merchant Merchant `json:"merchant"`
 	// 订单状态 推送
 	Status int `json:"status"`
+	// 取餐方式
+	// export const pickTypes = [
+	//    { id: 0, name: '自提' },
+	//    { id: 1, name: '外卖' },
+	//    { id: 2, name: '堂食' },
+	//    { id: 3, name: '快递' },
+	//    { id: 4, name: '虚拟' },
+	//];
+	Pick cst.OrderPickType `json:"pick"`
 }
 
 type User struct {
