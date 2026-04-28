@@ -18,6 +18,7 @@ const (
 	UniPay
 )
 
+// PayMethod TODO 支付方法与支付渠道有重复了，后续要进行统一
 type PayMethod int
 
 const (
@@ -29,6 +30,7 @@ const (
 	AliMiniPay
 	// AliScanQRCode 支付宝扫码支付
 	AliScanQRCode
+	OfflineCashPay // 线下现金支付
 )
 
 func (p PayMethod) String() string {
