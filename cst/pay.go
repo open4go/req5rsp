@@ -1,6 +1,8 @@
 package cst
 
-// ChannelType 支付渠道类型
+// ChannelType 支付渠道
+// 支付渠道	实际完成资金划转的通道或服务商，
+// 负责对接银行、清算机构、第三方支付平台	微信支付、支付宝、银联云闪付、PayPal、Stripe、银行直连
 type ChannelType int
 
 const (
@@ -18,7 +20,8 @@ const (
 	UniPay
 )
 
-// PayMethod TODO 支付方法与支付渠道有重复了，后续要进行统一
+// PayMethod 支付方式 用户看到的支付工具或支付形式，是用户在结账时选择的交互选项
+// 余额支付、扫码支付、现金支付、银行卡支付、信用卡、分期付款
 type PayMethod int
 
 const (
@@ -31,10 +34,12 @@ const (
 	// AliScanQRCode 支付宝扫码支付
 	AliScanQRCode
 	OfflineCashPay // 线下现金支付
+	PointsPay      // 点券支付（虚拟代币）
+	BalancePayMethod
 )
 
 func (p PayMethod) String() string {
-	return [...]string{"微信小程序支付", "微信扫码支付", "支付宝小程序支付", "支付宝扫码支付"}[p]
+	return [...]string{"微信小程序支付", "微信扫码支付", "支付宝小程序支付", "支付宝扫码支付", "线下现金支付", "点券支付（虚拟代币", "余额支付"}[p]
 }
 
 type PayStatus int
