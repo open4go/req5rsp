@@ -1,5 +1,7 @@
 package cst
 
+import "fmt"
+
 // OrderStatus 订单状态
 type OrderStatus int
 
@@ -44,6 +46,46 @@ const (
 	// OrderRefunded 申请退款成功
 	OrderRefunded
 )
+
+// statusText 定义状态对应的中文说明
+var statusText = map[OrderStatus]string{
+	OrderInit:               "订单初始化(未完成支付)",
+	OrderPaid:               "订单已付款",
+	OrderMaking:             "订单制作中",
+	OrderProduceCompleted:   "订单制作完成",
+	OrderCompleted:          "订单完成",
+	OrderCancelRejected:     "拒绝取消",
+	OrderCancel:             "订单取消",
+	OrderCancelApproved:     "商家同意取消",
+	OrderCancelCompleted:    "订单取消并已退款",
+	OrderTakeoutPending:     "外卖等待接单",
+	OrderTakeoutConfirmed:   "外卖已接单",
+	OrderTakeoutUnConfirmed: "外卖放弃接单",
+	OrderTakeoutTake:        "外卖已取货",
+	OrderTakeoutDone:        "外卖已送达",
+	OrderTakeoutComment:     "订单已评论",
+	OrderClosed:             "订单已关闭",
+	OrderRefundApply:        "申请退款中",
+	OrderRefunded:           "退款成功",
+}
+
+// String 实现 fmt.Stringer 接口，推荐使用
+func (s OrderStatus) String() string {
+	if text, ok := statusText[s]; ok {
+		return text
+	}
+	return fmt.Sprintf("未知状态(%d)", s)
+}
+
+// OrderStatusName 获取订单状态名称（可单独调用）
+func OrderStatusName(status OrderStatus) string {
+	return status.String()
+}
+
+// GetOrderStatusText 同上，提供更语义化的函数名
+func GetOrderStatusText(status OrderStatus) string {
+	return status.String()
+}
 
 const (
 	// OrderFromWxMini 微信小程序
