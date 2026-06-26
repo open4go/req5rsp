@@ -1,51 +1,57 @@
 package log
 
 import (
-	"github.com/docker/docker/client"
+	"context"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"golang.org/x/net/context"
 	"io"
 	"os"
 	"runtime"
+	"runtime/debug"
 	"strconv"
 	"strings"
 )
 
-// getDockerMetadata fetches the Docker container metadata
-func getDockerMetadata() (string, string, string, error) {
-	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
-	if err != nil {
-		return "", "", "", err
-	}
-
-	ctx := context.Background()
-	containerID := os.Getenv("HOSTNAME")
-	containerJSON, err := cli.ContainerInspect(ctx, containerID)
-	if err != nil {
-		return "", "", "", err
-	}
-
-	return containerJSON.Config.Image, containerJSON.Name, containerID, nil
-}
-
 var logger = logrus.New()
 
-// Init 在main函数中必须初始化
+// =======================
+// 构建 & 实例元信息
+// =======================
+
+type buildMeta struct {
+	Image     string
+	GitCommit string
+	GitBranch string
+	BuildTime string
+	Instance  string
+}
+
+var meta = buildMeta{
+	Image:     os.Getenv("IMAGE_TAG"),
+	GitCommit: os.Getenv("GIT_COMMIT"),
+	GitBranch: os.Getenv("GIT_BRANCH"),
+	BuildTime: os.Getenv("BUILD_TIME"),
+	Instance:  os.Getenv("HOSTNAME"),
+}
+
+// =======================
+// 初始化
+// =======================
+
 func Init(logLevel string, output io.Writer) {
 	if output != nil {
 		logger.SetOutput(output)
 	} else {
-		// 输出到终端
 		logger.SetOutput(os.Stdout)
 	}
-	// 强制使用json日志格式
-	logger.SetFormatter(&logrus.JSONFormatter{})
-	// 设置日志级别
+
+	logger.SetFormatter(&logrus.JSONFormatter{
+		TimestampFormat: "2006-01-02T15:04:05.000Z07:00",
+	})
+
 	switch logLevel {
 	case "debug":
 		logger.SetLevel(logrus.DebugLevel)
-	case "test":
 	case "info":
 		logger.SetLevel(logrus.InfoLevel)
 	case "warn":
@@ -57,74 +63,123 @@ func Init(logLevel string, output io.Writer) {
 	}
 }
 
-func Log(ctx context.Context) *logrus.Entry {
-	pc, file, line, ok := runtime.Caller(1)
-	if !ok {
-		panic("Could not get context info for logger!")
-	}
+// =======================
+// 公共日志入口（优化后）
+// =======================
 
+// Log 普通日志（Info / Debug 级别，不带堆栈）
+func Log(ctx context.Context) *logrus.Entry {
+	filename, fn := getCallerInfo(2)
+	return getBaseEntry(ctx, filename, fn)
+}
+
+// Error 错误日志（自动带完整堆栈）
+func Error(ctx context.Context, err error, args ...interface{}) {
+	filename, fn := getCallerInfo(2)
+	entry := getBaseEntry(ctx, filename, fn).
+		WithField("stacktrace", getStackTrace())
+
+	if len(args) == 0 {
+		entry.Error(err)
+	} else {
+		entry.WithError(err).Error(args...)
+	}
+}
+
+// Errorf 格式化错误日志（自动带完整堆栈）
+func Errorf(ctx context.Context, err error, format string, args ...interface{}) {
+	filename, fn := getCallerInfo(2)
+	entry := getBaseEntry(ctx, filename, fn).
+		WithField("stacktrace", getStackTrace())
+
+	entry.WithError(err).Errorf(format, args...)
+}
+
+// WarnWithStack 警告日志（按需带堆栈）
+func WarnWithStack(ctx context.Context, msg interface{}, args ...interface{}) {
+	filename, fn := getCallerInfo(2)
+	entry := getBaseEntry(ctx, filename, fn).
+		WithField("stacktrace", getStackTrace())
+
+	if len(args) == 0 {
+		entry.Warn(msg)
+	} else {
+		entry.WithFields(logrus.Fields{"details": args}).Warn(msg)
+	}
+}
+
+// WarnfWithStack 格式化警告日志（按需带堆栈）
+func WarnfWithStack(ctx context.Context, format string, args ...interface{}) {
+	filename, fn := getCallerInfo(2)
+	entry := getBaseEntry(ctx, filename, fn).
+		WithField("stacktrace", getStackTrace())
+
+	entry.Warnf(format, args...)
+}
+
+// =======================
+// 内部工具函数
+// =======================
+
+func getBaseEntry(ctx context.Context, filename, fn string) *logrus.Entry {
 	serverName := viper.GetString("server.name")
 
-	// 拼接必要字段
-	//filename := file[strings.LastIndex(file, "/")+1:] + ":" + strconv.Itoa(line)
-	// Modify how the filename is extracted to include at least /parent/child.go
-	// Split the file path into its components
-	fileParts := strings.Split(file, "/")
+	logCtx := logger.
+		WithField("server", serverName).
+		WithField("file", filename).
+		WithField("func", fn)
 
-	// Get at least two levels (parent/child.go), or just child.go if less
-	var filename string
-	if len(fileParts) > 1 {
-		filename = strings.Join(fileParts[len(fileParts)-2:], "/") + ":" + strconv.Itoa(line)
-	} else {
-		filename = fileParts[0] + ":" + strconv.Itoa(line)
+	// 请求上下文
+	if ctx != nil {
+		if traceID := ctx.Value("traceid"); traceID != nil && traceID != "" {
+			logCtx = logCtx.WithField("trace", traceID)
+		}
+		if ip := ctx.Value("ip"); ip != nil && ip != "" {
+			logCtx = logCtx.WithField("ip", ip)
+		}
+		if merchantId := ctx.Value("MERCHANT_KEY"); merchantId != nil && merchantId != "" {
+			logCtx = logCtx.WithField("merchantId", merchantId)
+		}
+		if operator := ctx.Value("OPERATOR_KEY"); operator != nil && operator != "" {
+			logCtx = logCtx.WithField("operator", operator)
+		}
 	}
+
+	// 构建 & 实例信息
+	if meta.Image != "" {
+		logCtx = logCtx.WithField("image", meta.Image)
+	}
+	if meta.GitCommit != "" {
+		logCtx = logCtx.WithField("git_commit", meta.GitCommit)
+	}
+	if meta.GitBranch != "" {
+		logCtx = logCtx.WithField("git_branch", meta.GitBranch)
+	}
+	if meta.BuildTime != "" {
+		logCtx = logCtx.WithField("build_time", meta.BuildTime)
+	}
+	if meta.Instance != "" {
+		logCtx = logCtx.WithField("instance", meta.Instance)
+	}
+
+	return logCtx
+}
+
+func getCallerInfo(skip int) (string, string) {
+	pc, file, line, ok := runtime.Caller(skip)
+	if !ok {
+		return "unknown", "unknown"
+	}
+
+	fileParts := strings.Split(file, "/")
+	filename := fileParts[len(fileParts)-1] + ":" + strconv.Itoa(line)
 
 	funcName := runtime.FuncForPC(pc).Name()
 	fn := funcName[strings.LastIndex(funcName, ".")+1:]
 
-	logCtx := logger.
-		WithField("file", filename).
-		WithField("func", fn).
-		WithField("server", serverName)
-	// 增加traceid
-	// 部分情况下无法获取到
-	traceID := ctx.Value("traceid")
-	if traceID != "" {
-		logCtx = logCtx.WithField("trace", traceID)
-	}
-	// 增加请求ip
-	ip := ctx.Value("ip")
-	if ip != "" {
-		logCtx = logCtx.WithField("ip", ip)
-	}
+	return filename, fn
+}
 
-	merchantId := ctx.Value("MERCHANT_KEY")
-	if merchantId != "" {
-		logCtx = logCtx.WithField("merchantId", merchantId)
-	}
-
-	operator := ctx.Value("OPERATOR_KEY")
-	if operator != "" {
-		logCtx = logCtx.WithField("operator", operator)
-	}
-
-	// 获取镜像元数据
-	image, container, instanceID, err := getDockerMetadata()
-	if err != nil {
-		//log.Printf("Failed to get Docker metadata (when run it on local, can ignore this) %v", err)
-		return logCtx
-	} else {
-		// 只有容器中运行才能获取到相关信息
-		// 并且运行的容器需要挂着配置 /var/run/docker.sock
-		// 例如:
-		// services:
-		//  member:
-		//    image: r2day/member-api:pro
-		//    volumes:
-		//      - /var/run/docker.sock:/var/run/docker.sock
-		return logCtx.
-			WithField("image", image).
-			WithField("container", container).
-			WithField("instance", instanceID)
-	}
+func getStackTrace() string {
+	return string(debug.Stack())
 }

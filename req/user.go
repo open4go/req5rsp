@@ -1,6 +1,15 @@
 package req
 
-import target "github.com/r2day/f9z/member"
+import (
+	targetLevel "github.com/r2day/f9z/level"
+	target "github.com/r2day/f9z/member"
+)
+
+// CondReq 层级升级调用rpc 接口
+type CondReq struct {
+	Cond  targetLevel.ConditionType `json:"cond"`
+	Value int64                     `json:"value" bson:"value"` // 最大值（0 表示无上限）
+}
 
 // UserRequest 用户基本信息请求体
 type UserRequest struct {
