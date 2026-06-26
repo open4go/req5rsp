@@ -1,8 +1,8 @@
-package rpc
+package hrpc
 
 import (
+	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/open4go/log"
 	"github.com/open4go/req5rsp/req"
 	"github.com/open4go/util9s"
@@ -15,7 +15,7 @@ const (
 )
 
 // UpdateUserLevel 更新会员层级
-func UpdateUserLevel(c *gin.Context, userId string, payload req.CondReq) error {
+func UpdateUserLevel(ctx context.Context, userId string, payload req.CondReq) error {
 	if userId == "" {
 		return fmt.Errorf("userId 不能为空")
 	}
@@ -27,7 +27,6 @@ func UpdateUserLevel(c *gin.Context, userId string, payload req.CondReq) error {
 
 	url := baseURL + updateUserLevel + userId
 
-	ctx := c.Request.Context()
 	logger := log.Log(ctx).WithField("user_id", userId).
 		WithField("payload", payload).
 		WithField("url", url)
