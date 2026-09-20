@@ -54,6 +54,8 @@ type Order struct {
 	Customer User `json:"customer"`
 	// 供应商
 	Merchant Merchant `json:"merchant"`
+	// MerchantID 租户站点号，用于广播隔离
+	MerchantID string `json:"merchant_id,omitempty"`
 	// 订单状态 推送
 	Status int `json:"status"`
 	// 取餐方式
