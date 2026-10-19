@@ -16,7 +16,7 @@ const (
 
 // OrderPaySuccess 支付成功关键信息
 type OrderPaySuccess struct {
-	// 渠道
+	// Channel 支付渠道。拉卡拉约定值为 "kala"。空字符串表示不覆盖订单上已有渠道。
 	Channel string `json:"channel"`
 	// 三方id
 	OpenID string `json:"open_id"`

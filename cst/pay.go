@@ -10,7 +10,7 @@ const (
 	WeChatPay ChannelType = iota
 	// BalancePay 余额支付
 	BalancePay
-	// KalaPay 卡拉卡支付
+	// KalaPay 拉卡拉支付（payjp）。值固定为 2，不要在前面插入新常量。
 	KalaPay
 	// AliPay 支付宝
 	AliPay
@@ -36,10 +36,39 @@ const (
 	OfflineCashPay // 线下现金支付
 	PointsPay      // 点券支付（虚拟代币）
 	BalancePayMethod
+	// LakalaMicropay 拉卡拉被扫（顾客付款码）。
+	LakalaMicropay
+	// LakalaNativeQR 拉卡拉主扫（屏幕展示聚合码）。
+	LakalaNativeQR
+	// LakalaMiniPay 拉卡拉小程序。v1 只占位，不调用。
+	LakalaMiniPay
 )
 
 func (p PayMethod) String() string {
-	return [...]string{"微信小程序支付", "微信扫码支付", "支付宝小程序支付", "支付宝扫码支付", "线下现金支付", "点券支付（虚拟代币", "余额支付"}[p]
+	switch p {
+	case WxMiniPay:
+		return "微信小程序支付"
+	case WxScanQRCode:
+		return "微信扫码支付"
+	case AliMiniPay:
+		return "支付宝小程序支付"
+	case AliScanQRCode:
+		return "支付宝扫码支付"
+	case OfflineCashPay:
+		return "线下现金支付"
+	case PointsPay:
+		return "点券支付（虚拟代币）"
+	case BalancePayMethod:
+		return "余额支付"
+	case LakalaMicropay:
+		return "拉卡拉被扫"
+	case LakalaNativeQR:
+		return "拉卡拉主扫"
+	case LakalaMiniPay:
+		return "拉卡拉小程序支付"
+	default:
+		return "其他"
+	}
 }
 
 type PayStatus int

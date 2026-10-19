@@ -10,12 +10,26 @@ type Keys struct {
 	Private string `form:"private" json:"private" xml:"private"`
 	// Type 密钥类型
 	Type string `form:"type" json:"type" xml:"type"  binding:"required"`
-	// Type 密钥类型
-	MerchantConf Merchant `form:"merchant_conf" json:"merchant_conf" xml:"merchant_conf"  binding:"required"`
+	// MerchantConf 微信/支付宝/银行商户块。拉卡拉（type=3）允许为空，必填改在 finance-api create。
+	MerchantConf *Merchant `form:"merchant_conf" json:"merchant_conf" xml:"merchant_conf"`
+	// Lakala 拉卡拉 payjp 密钥。type=3 时由 finance-api 校验 partner_code 与 credential_code。
+	Lakala Lakala `form:"lakala" json:"lakala" xml:"lakala"`
 	// 支付单位
 	Unit cst.PayUnit `form:"unit" json:"unit" xml:"unit"`
 	// Enabled 是否启用
 	Enabled bool `form:"enabled" json:"enabled" xml:"enabled"`
+}
+
+// Lakala 拉卡拉网关密钥。不要复用微信的商户证书或 APIv3。
+type Lakala struct {
+	PartnerCode    string `form:"partner_code" json:"partner_code" xml:"partner_code"`
+	CredentialCode string `form:"credential_code" json:"credential_code" xml:"credential_code"`
+	AppID          string `form:"app_id" json:"app_id" xml:"app_id"`
+	Env            string `form:"env" json:"env" xml:"env"` // test | prod
+	NotifyURL      string `form:"notify_url" json:"notify_url" xml:"notify_url"`
+	Redirect       string `form:"redirect" json:"redirect" xml:"redirect"`
+	Currency       string `form:"currency" json:"currency" xml:"currency"` // 空则 CNY
+	Version        string `form:"version" json:"version" xml:"version"`
 }
 
 type Merchant struct {
