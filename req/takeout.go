@@ -23,7 +23,7 @@ type TakeOutOrder struct {
 	ReceiverPhone   string `json:"receiver_phone"  binding:"required"`
 	Note            string `json:"note"  binding:"required"`
 	CallbackUrl     string `json:"callback_url" `
-	PushType        string `json:"push_type,default=2"`
+	PushType        string `json:"push_type"`
 	SpecialType     string `json:"special_type"`
 	CallmeWithtake  string `json:"callme_withtake"`
 }
